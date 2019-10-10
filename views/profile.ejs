@@ -1,0 +1,29 @@
+<%- include header %>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title"><%=data[0].first_name%>, <%=data[0].last_name%></h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="http://localhost:8080/me.jpg" class="img-circle img-responsive"> </div>
+            <div class=" col-md-9 col-lg-9 "> 
+              <table class="table table-user-information">
+                <tbody>
+                  <tr>
+                    <td>User Name:</td>
+                    <td><%=data[0].user_name%></td>
+                  </tr>
+                  <tr>
+                    <td>Mobile:</td>
+                    <td><%=data[0].mob_no%></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+ <%- include footer %>
