@@ -2,7 +2,7 @@
 simple login and registration tutorial with mysql
 
 ```js
-cd simple_login
+cd node-mysql-login-registration-master
 npm install
 node app.js
 
