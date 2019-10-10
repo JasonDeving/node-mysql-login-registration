@@ -1,4 +1,4 @@
-
+const bcrypt = require('bcrypt');
 //---------------------------------------------signup page call------------------------------------------------------
 exports.signup = function(req, res){
    message = '';
@@ -9,14 +9,19 @@ exports.signup = function(req, res){
       var fname= post.first_name;
       var lname= post.last_name;
       var mob= post.mob_no;
+      
+      bcrypt.hash(pass, 10, function(err, hash){
+         
+         var sql = "INSERT INTO `users`(`first_name`,`last_name`,`mob_no`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + mob + "','" + name + "','" + hash + "')";
 
-      var sql = "INSERT INTO `users`(`first_name`,`last_name`,`mob_no`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + mob + "','" + name + "','" + pass + "')";
-
-      var query = db.query(sql, function(err, result) {
+         var query = db.query(sql, function(err, result) {
 
          message = "Succesfully! Your account has been created.";
          res.render('signup.ejs',{message: message});
+         });
+
       });
+      
 
    } else {
       res.render('signup');
@@ -31,9 +36,11 @@ exports.login = function(req, res){
    if(req.method == "POST"){
       var post  = req.body;
       var name= post.user_name;
-      var pass= post.password;
-     
-      var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'";                           
+      var pass = post.password;
+      bcrypt.compare(pass, req.session.userId , function(err, res){
+         if(res) {
+            var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'";
+
       db.query(sql, function(err, results){      
          if(results.length){
             req.session.userId = results[0].id;
@@ -41,12 +48,16 @@ exports.login = function(req, res){
             console.log(results[0].id);
             res.redirect('/home/dashboard');
          }
-         else{
+         
+                 
+      });
+         } else{
             message = 'Wrong Credentials.';
             res.render('index.ejs',{message: message});
          }
-                 
       });
+
+      
    } else {
       res.render('index.ejs',{message: message});
    }
